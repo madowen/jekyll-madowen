@@ -34,9 +34,10 @@ hr {
 }
 
 pre {
-    margin-left: 30px;
+    /*margin-left: 30px;*/
     padding: 5px;
-    width: 80%;
+    width: 100%;
+    word-break: keep-all;
 }
 
 code {
