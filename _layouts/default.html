@@ -13,6 +13,11 @@
 
         <link rel="stylesheet" href="{{site.baseurl}}/resources/fontello/css/fontello.css">
         <link rel="stylesheet" href="{{site.baseurl}}/resources/fontello/css/animation.css">
+
+        <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+
         <!--[if IE 7]><link rel="stylesheet" href="{{site.baseurl}}/resources/fontello/css/fontello-ie7.css"><![endif]-->
     </head>
 
@@ -43,6 +48,17 @@
             </ul>
         </nav>
 
+ <section>aaa
+        <table>
+            {% for post in site.categories[page.category] %}
+            <tr>
+                <td><i class="icon-clock"></i><time datetime="{{post.date|date:"%F"}}">{{post.date|date:"%b %d, %Y"}}</time></td>  
+                <td><a href="{{site.baseurl}}{{ post.url }}">{{ post.title }}</a></td>
+                <td><span class="category"><i class="icon-tag"></i> {{post.categories | category_links}}</span></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
         <main>
 
             {{ content }}

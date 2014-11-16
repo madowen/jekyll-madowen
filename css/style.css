@@ -9,6 +9,14 @@ body {
     color:#fff;  
     padding-left: 50px;
     padding-right: 20%;
+    word-spacing: 0.3em
+}
+
+p{
+    display: block;
+    line-height: 1.6em;
+    margin-bottom: 1.5em;
+
 }
 
 body>header h1>a,
@@ -38,6 +46,7 @@ pre {
     padding: 5px;
     width: 100%;
     word-break: keep-all;
+    white-space: pre-wrap;
 }
 
 code {
@@ -54,6 +63,7 @@ td {
 }
 a{
     color: #f00;
+    text-decoration: none;
 }
 a:hover {
     color: #fff;
@@ -122,10 +132,10 @@ article .entry {
 }
 
 article .entry img {
-    display: block;
+/*    display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 100%;
+*/    max-width: 100%;
 }
 article header{
     border-bottom: 1px solid #333;
@@ -156,4 +166,29 @@ section address {
 
 .more {
     margin-left: 80%;
+}
+
+.MathJax{
+    color: #aaa;
+}
+
+iframe{
+    border: 0px;
+    width: 100%;
+}
+
+.alignright{
+    display: inline;
+    float: right;
+    margin: .5em 0 .5em 1.5em;
+}
+
+.alignleft{
+    display: inline;
+    float: left;
+    margin: .5em 1.5em .5em 0;
+}
+
+.highlight{
+    word-spacing: 0em;
 }

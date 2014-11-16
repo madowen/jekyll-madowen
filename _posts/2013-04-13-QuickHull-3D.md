@@ -1,8 +1,14 @@
 ---
 layout: post
+permalink: '/:title'
 title: QuickHull 3D
 category: Computational Geometry
-tags:  3D, Computational Geometry, OpenGL, Quickhull, Teapot
+tags:
+- 3D
+- Computational Geometry
+- OpenGL
+- Quickhull
+- Teapot
 author: Alex Catalán
 ---
 
@@ -85,7 +91,7 @@ author: Alex Catalán
 		I made some changes on my implementation but the essence is the same.
 	</p>
 	<p style="text-align:justify;">
-		<a href="http://www.madowen.es/wp-content/uploads/2013/04/quickhull-initial.jpg"><!--<!--<img alt="quickhull-initial" class="aligncenter size-full wp-image-68" height="350" src="http://www.madowen.es/wp-content/uploads/2013/04/quickhull-initial.jpg" width="963" />-->imagen</a>
+		{% img /assets/2013-04-13-QuickHull-3D/quickhull-initial.jpg %}
 	</p>
 </div>
 <div>
@@ -124,7 +130,7 @@ author: Alex Catalán
 		The first thing to do is calculate the simplex. The simplex is a triangle that separates points in two areas. This will take 3 points, two with maximum X and Y coordinate, and another with the minimum Z coordinate of the whole set of points.
 	</p>
 	<p style="text-align:justify;">
-		<a href="http://www.madowen.es/wp-content/uploads/2013/04/quickhull-simplex.jpg" ><!--<img alt="quickhull-simplex" class="aligncenter size-full wp-image-67" height="350" src="http://www.madowen.es/wp-content/uploads/2013/04/quickhull-simplex.jpg" style="opacity: 0.9;" width="963" />-->imagen</a>
+		{% img /assets/2013-04-13-QuickHull-3D/quickhull-simplex.jpg %}
 	</p>
 	<p style="text-align:justify;">
 		After the simplex is created, split the remaining points that are visible for the two facets from the simplex (a triangle in 3D has 2 faces). To know if a point is visible for a facet, we have to calculate if this point is above the facet. And to know if a point is above a plane, we evaluate the point on the plane normal.
@@ -139,7 +145,7 @@ author: Alex Catalán
 		Finally once created the new triangles will split the points of collection points on the new triangles created. This loop is executed while there are facets with outside points.
 	</p>
 	<p style="text-align:justify;">
-		<a href="http://www.madowen.es/wp-content/uploads/2013/04/quickhull-final.jpg" ><!--<img alt="quickhull-final" class="aligncenter size-full wp-image-70" height="350" src="http://www.madowen.es/wp-content/uploads/2013/04/quickhull-final.jpg" title="Quickhull 3D" width="963" />-->imagen</a>
+		{% img /assets/2013-04-13-QuickHull-3D/quickhull-final.jpg %}
 	</p>
 </div>
 <div>
@@ -155,8 +161,10 @@ author: Alex Catalán
 	<p style="text-align:justify;">
 		The solution implemented, was using a reference point. This point must always remain within the polygon, even in the first iteration. Therefore, is calculated the baricenter of the initial simplex.
 	</p>
-	http://www.youtube.com/watch?v=9Nx3GaHteCc
 	<p style="text-align:justify;">
-		Here is the source code: <a href="http://www.madowen.es/wp-content/uploads/2014/01/QuickHull-src.zip">SRC</a>
+	{% youtube 9Nx3GaHteCc %}
+	</p>
+	<p style="text-align:justify;">
+		Here is the source code: <a href="http://www.madowen.es/wp-content/uploads/2014/01/QuickHull-src.zip"><i class="icon-download"></i>SRC</a>
 	</p>
 </div>

@@ -13,6 +13,11 @@
 
         <link rel="stylesheet" href="/resources/fontello/css/fontello.css">
         <link rel="stylesheet" href="/resources/fontello/css/animation.css">
+
+        <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+
         <!--[if IE 7]><link rel="stylesheet" href="/resources/fontello/css/fontello-ie7.css"><![endif]-->
     </head>
 
@@ -43,6 +48,11 @@
             </ul>
         </nav>
 
+ <section>aaa
+        <table>
+            
+        </table>
+    </section>
         <main>
 
             <!-- Show last 5 posts here -->
@@ -50,14 +60,21 @@
     <article>
 
         <header>
-            <h2><a href="/interactive%20systems/2013/07/21/Simple-Race-Game/">Simple Race Game</a></h2>
+            <h2><a href="/Match-3">Match 3</a></h2>
             <metadata>
-                <span class="date"><i class="icon-clock"></i><time datetime="2013-07-21">Jul 21, 2013</time></span> | <span class="category"><i class="icon-tag"></i> interactive systems</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
+                <span class="date"><i class="icon-clock"></i><time datetime="2014-08-27">Aug 27, 2014</time></span> | <span class="category"><i class="icon-tag"></i> unity3, games</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
             </metadata>
         </header>
     
         <div class="entry"><p style="text-align:justify;">
-    In the last quarter of this year in college, I am studying Interactive Systems. In this course we started working with OpenFrameworks, which is nothing more than a framework that makes it easy to use OpenGL and development of 2D and 3D Applications. The first project that we are developing is a 2D multiplayer racing game.
+    This time the challenge proposed is a Match 3 game, like Bejeweled made by PopCap, Candy Crush Saga from King, or Frozen Free Fall developed by <a href="http://www.generamobile.com/">Genera Interactive</a> who proposed me this challenge.
+</p>
+
+
+
+
+<p style="text-align:justify;">
+    The objective of the game is quite simple, you have to change a tile by an adjacent (up,down,right or left) in order to get 3 (or more) tiles in a row or column, if there isn't a match of 3, tiles will swap back to their position, else if the match exists, all the tiles in the match will disapear. Then the above tiles will fall to fill the blanks and new ones will be created to fill in the blanks at the top of the board.
 </p>
 
 
@@ -65,54 +82,108 @@
 
 <p><p></p>
 </div>
-        <div class="more"><a href="/interactive%20systems/2013/07/21/Simple-Race-Game/#more">Continue reading &rarr;</a></div>
+        <div class="more"><a href="/Match-3#more">Continue reading &rarr;</a></div>
 
     </article>
 
     <article>
 
         <header>
-            <h2><a href="/graphics/2013/06/18/Game-Engine/">Game Engine</a></h2>
+            <h2><a href="/Challenge-2D">Challenge 2D</a></h2>
             <metadata>
-                <span class="date"><i class="icon-clock"></i><time datetime="2013-06-18">Jun 18, 2013</time></span> | <span class="category"><i class="icon-tag"></i> graphics</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
+                <span class="date"><i class="icon-clock"></i><time datetime="2014-05-20">May 20, 2014</time></span> | <span class="category"><i class="icon-tag"></i> unity3, games</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
+            </metadata>
+        </header>
+    
+        <div class="entry"><p style="text-align:justify;">
+    This is the result of a challenge proposed by <a href="http://www.bigvikinggames.com/">Big Viking Games</a>, they provided me the graphics and the development depended on me. It took me 10 days to develop it from scratch.
+</p>
+
+
+
+
+<p style="text-align:justify;">
+    The terrain is generated procedurally, it has some zones with different set of tiles, each zone has a basic tile that appears around the 90% of times and the other 10% comes from decoration tiles of each zone. Apart from the zones, decoratives tiles can appear in all zones, and then there are the obstacles that provides cover against the enemy projectiles.
+</p>
+
+
+
+
+<p style="text-align:justify;">
+    There are 3 types of enemies, with their own Artificial Intelligence, stats and bullets.
+</p>
+
+
+
+
+<p><p></p>
+</div>
+        <div class="more"><a href="/Challenge-2D#more">Continue reading &rarr;</a></div>
+
+    </article>
+
+    <article>
+
+        <header>
+            <h2><a href="/Procedural-Terrain-Generation">Procedural Terrain Generation</a></h2>
+            <metadata>
+                <span class="date"><i class="icon-clock"></i><time datetime="2014-04-26">Apr 26, 2014</time></span> | <span class="category"><i class="icon-tag"></i> unity3, graphics</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
+            </metadata>
+        </header>
+    
+        <div class="entry"><p style="text-align:justify;">
+    The first thing we should ask ourselves is: What is the procedural content generation and what we can do with it on games? PCG is the the automatic or computer-assisted generation of game content such as levels, landscapes, items, rules, quests etc. This time we are generating the terrain for a posible sandbox game using voxels, like Minecraft. I have decided to use voxels because they are easy to manage and will allow me to do whatever I want with the terrain (cliffs, mountains, canyons, caves, corridors between caves, etc)
+</p>
+
+
+<p><p style="text-align:justify;"></p>
+</div>
+        <div class="more"><a href="/Procedural-Terrain-Generation#more">Continue reading &rarr;</a></div>
+
+    </article>
+
+    <article>
+
+        <header>
+            <h2><a href="/Puzzle-Bobble-(First-Unity-Project)">Puzzle Bobble (First Unity Project)</a></h2>
+            <metadata>
+                <span class="date"><i class="icon-clock"></i><time datetime="2014-04-10">Apr 10, 2014</time></span> | <span class="category"><i class="icon-tag"></i> unity3d</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
             </metadata>
         </header>
     
         <div class="entry"><p><div>
     <p style="text-align:justify;">
-        This graphics engine is the biggest project I&#039;ve developed on graphical programming. Further on, I will try to explain more extensively the structure used for development, the use of each part&nbsp;of the structure and why I chose that structure and not another.
-    </p>
-    <p>
-        For now, here&#039;s a video demonstration.
-    </p>
-    <p id="more"></p>
+        In order to learn something useful to have more opportunities to work in the game industry, I have decided to start doing projects with Unity, so here&#039;s the first.
+    </p></p>
+
+<pre><code>&lt;p style="text-align:justify;"&gt;
+    A small imitation of the famous Puzzle Bobble obviously is not perfect, not as well finished as the original, but to start learning Unity3D and gain confidence, has been pretty good.
+&lt;/p&gt;
+
+&lt;p style="text-align:justify;"&gt;
+</code></pre>
 </div>
-        <div class="more"><a href="/graphics/2013/06/18/Game-Engine/#more">Continue reading &rarr;</a></div>
+        <div class="more"><a href="/Puzzle-Bobble-(First-Unity-Project)#more">Continue reading &rarr;</a></div>
 
     </article>
 
     <article>
 
         <header>
-            <h2><a href="/computational%20geometry/2013/05/24/Octree-+-Ray%20Collision/">Octree + Ray Collision</a></h2>
+            <h2><a href="/Ray-Tracing">Ray Tracing</a></h2>
             <metadata>
-                <span class="date"><i class="icon-clock"></i><time datetime="2013-05-24">May 24, 2013</time></span> | <span class="category"><i class="icon-tag"></i> computational geometry</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
+                <span class="date"><i class="icon-clock"></i><time datetime="2013-08-08">Aug 08, 2013</time></span> | <span class="category"><i class="icon-tag"></i> graphics</span> | <span class="author"><i class="icon-user"></i> Alex Catalán</span>
             </metadata>
         </header>
     
-        <div class="entry"><p style="text-align:justify;">
-    Nowadays&nbsp;in applications that work with 3D graphical environments require monitoring the collision between meshes with lots of triangles, so that the computational cost of checking all triangles of both meshes would be too high.
-</p>
-
-
-<p style="text-align:justify;">
-    To solve this problem, it&#039;s posible to&nbsp;divide the triangles of the mesh in areas, so we will have a smaller amount of triangles to check for each sector.&nbsp;This creates a data structure in a tree, in which the father wraps to subsectors children. This distribution of data also can be applied in both 2D (Quadtree) and 3D (Octree).
+        <div class="entry"><p style="text-align: justify;">
+    In computer graphics, Ray Tracing is an algorithm for generating 3D images by tracing the path of light through pixels in an image plane and simulating the effects of its encounters with virtual objects, like reflections, refractions, shadows. The algorithm produce a very high degree of visual realism.
 </p>
 
 
 <p><p id="more"></p>
 </div>
-        <div class="more"><a href="/computational%20geometry/2013/05/24/Octree-+-Ray%20Collision/#more">Continue reading &rarr;</a></div>
+        <div class="more"><a href="/Ray-Tracing#more">Continue reading &rarr;</a></div>
 
     </article>
 

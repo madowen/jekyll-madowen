@@ -1,8 +1,14 @@
 ---
 layout: post
+permalink: '/:title'
 title: Simple Race Game
 category: Interactive Systems
-tags:   2D, Car, Game, Interactive Systems, Race
+tags:
+- 2D
+- Car
+- Game
+- Interactive Systems
+- Race
 author: Alex Catalán
 ---
 
@@ -24,16 +30,16 @@ author: Alex Catalán
    </p>
 
 {% highlight c++ linenos %}
-    #include "testApp.h"
-    #include "ofAppGlutWindow.h"
+#include "testApp.h"
+#include "ofAppGlutWindow.h"
 
-    //--------------------------------------------------------------
-    int main(){
-        ofAppGlutWindow window; // create a window
-        // set width, height, mode (OF_WINDOW or OF_FULLSCREEN)
-        ofSetupOpenGL(&amp;window, 1024, 768, OF_WINDOW);
-        ofRunApp(new testApp()); // start the app
-    }
+//--------------------------------------------------------------
+int main(){
+    ofAppGlutWindow window; // create a window
+    // set width, height, mode (OF_WINDOW or OF_FULLSCREEN)
+    ofSetupOpenGL(&window, 1024, 768, OF_WINDOW);
+    ofRunApp(new testApp()); // start the app
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -41,25 +47,25 @@ author: Alex Catalán
     </p>
 
 {% highlight c++ linenos %}
-    #pragma once
-    #include "ofMain.h"
+#pragma once
+#include "ofMain.h"
 
-    class testApp : public ofBaseApp{
-        public:
-        void setup();
-        void update();
-        void draw();
+class testApp : public ofBaseApp{
+    public:
+    void setup();
+    void update();
+    void draw();
 
-        void keyPressed(int key);
-        void keyReleased(int key);
-        void mouseMoved(int x, int y);
-        void mouseDragged(int x, int y, int button);
-        void mousePressed(int x, int y, int button);
-        void mouseReleased(int x, int y, int button);
-        void windowResized(int w, int h);
-        void dragEvent(ofDragInfo dragInfo);
-        void gotMessage(ofMessage msg);
-    };
+    void keyPressed(int key);
+    void keyReleased(int key);
+    void mouseMoved(int x, int y);
+    void mouseDragged(int x, int y, int button);
+    void mousePressed(int x, int y, int button);
+    void mouseReleased(int x, int y, int button);
+    void windowResized(int w, int h);
+    void dragEvent(ofDragInfo dragInfo);
+    void gotMessage(ofMessage msg);
+};
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -70,12 +76,12 @@ author: Alex Catalán
     </p>
 
 {% highlight c++ linenos %}
-    void testApp::setup(){
-        ofEnableAlphaBlendhighlighting();
-        // We set the application to run at 60 FPS.
-        ofSetFrameRate(60);
-        ...
-    }
+void testApp::setup(){
+    ofEnableAlphaBlendhighlighting();
+    // We set the application to run at 60 FPS.
+    ofSetFrameRate(60);
+    ...
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -92,28 +98,28 @@ author: Alex Catalán
     </p>
 
 {% highlight c++ linenos %}
-    class Car{
-        public:
-        // We declare the basic methods for the class.
-        Car();
-        ~Car();
+class Car{
+    public:
+    // We declare the basic methods for the class.
+    Car();
+    ~Car();
 
-        void setup(float x, float y,float width, float height);
-        void update(float dt);
-        void draw();
+    void setup(float x, float y,float width, float height);
+    void update(float dt);
+    void draw();
 
-        //GETERS &amp; SETERS//
-        ...
+    //GETERS & SETERS//
+    ...
 
-        private:
-        ofPoint   car_position_;
-        float     car_rotation_;
-        float     car_speed_;
-        ofImage*  texture_;
+    private:
+    ofPoint   car_position_;
+    float     car_rotation_;
+    float     car_speed_;
+    ofImage*  texture_;
 
-        float     car_width_;
-        float     car_height_;
-    }
+    float     car_width_;
+    float     car_height_;
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -123,25 +129,26 @@ author: Alex Catalán
     </p>
 
 {% highlight c++ linenos %}
-    void Car::set_texture(string path){
-        texture_ = new ofImage();
-        texture_-&gt;loadImage(path);
-    }
+void Car::set_texture(string path){
+    texture_ = new ofImage();
+    texture_->;loadImage(path);
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
-    	<a href="http://www.madowen.es/wp-content/uploads/2013/04/rotation.png" rel="" style="font-size:13px;text-align:justify;" target="" title=""><!--<img alt="rotation" class="alignright size-full wp-image-103" height="150" src="http://www.madowen.es/wp-content/uploads/2013/04/rotation.png" title="Rotation calc" width="155" />--></a> Now that we have set the car, we have to make it move. To calculate the position in the next frame, which must be the car when in motion, we will consider the current position, rotation, and the speed at which the car moves.<br />
-    	First we calculate the direction in which we should move, using the cosine and sine of the car&#039;s rotation, it will provide us a unit vector (length = 1) which will be multiplied by the car&#039;s speed to get the distance advanced in the cycle. And we will add to the current position.
+        {% img alignright /assets/2013-07-21-Simple-Race-Game/rotation.png 150 150 %}
+    	<!--<a href="http://www.madowen.es/wp-content/uploads/2013/04/rotation.png" rel="" style="font-size:13px;text-align:justify;" target="" title=""><img alt="rotation" class="alignright size-full wp-image-103" height="150" src="http://www.madowen.es/wp-content/uploads/2013/04/rotation.png" title="Rotation calc" width="155" /></a>--> Now that we have set the car, we have to make it move. To calculate the position in the next frame, which must be the car when in motion, we will consider the current position, rotation, and the speed at which the car moves.<br>
+    	First we calculate the direction in which we should move, using the cosine and sine of the car&#039;s rotation, it will provide us a unit vector (length = 1) which will be multiplied by the car&#039;s speed to get the distance advanced in the cycle. And we will add to the current position.<br>
     </p>
 
 {% highlight c++ linenos %}
-    void Car::update(float dt){
-        //cos() and sin() works in radians, so we have to transform degree-&gt;radian
-        ofVec2f turn(cos(car_rotation_*PI/180),sin(car_rotation_*PI/180));
-        ofPoint new_position = car_position_+turn*car_speed_*dt;
+void Car::update(float dt){
+    //cos() and sin() works in radians, so we have to transform degree->;radian
+    ofVec2f turn(cos(car_rotation_*PI/180),sin(car_rotation_*PI/180));
+    ofPoint new_position = car_position_+turn*car_speed_*dt;
 
-        car_position_.set(new_position);
-    }
+    car_position_.set(new_position);
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -153,17 +160,17 @@ author: Alex Catalán
     </p>
 
 {% highlight c++ linenos %}
-    void Car::draw(){
-        ofPushMatrix();
-        ofTranslate(car_position_.x,car_position_.y);   //translate to correct position
-        ofTranslate(car_width_/2,car_height_/2);        //move to the texture center
-        ofRotate(car_rotation_,0,0,1);                  //rotate to correct orientation
+void Car::draw(){
+    ofPushMatrix();
+    ofTranslate(car_position_.x,car_position_.y);   //translate to correct position
+    ofTranslate(car_width_/2,car_height_/2);        //move to the texture center
+    ofRotate(car_rotation_,0,0,1);                  //rotate to correct orientation
 
-        ofTranslate(-car_width_/2,-car_height_/2);      //return to correct position
+    ofTranslate(-car_width_/2,-car_height_/2);      //return to correct position
 
-        texture_-&gt;draw(0,0,car_width_,car_height_);     //draw the texture
-        ofPopMatrix();
-    }
+    texture_->;draw(0,0,car_width_,car_height_);     //draw the texture
+    ofPopMatrix();
+}
 {% endhighlight %}
 </div>
 <div>
@@ -186,7 +193,7 @@ class Scenario{
     void update();
     void draw();
 
-    //GETERS &amp; SETERS//
+    //GETERS & SETERS//
     ...
 
     private:
@@ -208,17 +215,17 @@ class Scenario{
     </p>
 
 {% highlight c++ linenos %}
-    Scenario::Scenario(){
-        texture_array_ = (ofImage**)malloc(7*sizeof(ofImage*));
+Scenario::Scenario(){
+    texture_array_ = (ofImage**)malloc(7*sizeof(ofImage*));
 
-        scenario_width_ = 8;
-        scenario_height_ = 6;
+    scenario_width_ = 8;
+    scenario_height_ = 6;
 
-        tile_width_ = ofGetWidth()/scenario_width_;
-        tile_height_ = ofGetHeight()/scenario_height_;
+    tile_width_ = ofGetWidth()/scenario_width_;
+    tile_height_ = ofGetHeight()/scenario_height_;
 
-        scenario_array_ = (int*)malloc(scenario_width_*scenario_height_*sizeof(int));
-    }
+    scenario_array_ = (int*)malloc(scenario_width_*scenario_height_*sizeof(int));
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -227,42 +234,44 @@ class Scenario{
     </p>
 
 {% highlight c++ linenos %}
-    void Scenario::setup(){
+void Scenario::setup(){
 
-        // Just for loading purposes we print by console when we start loading the scenario.
-        cout &lt;&lt; &quot;LOADING SCENARIO&quot; &lt;&lt; endhighlightl;
+    // Just for loading purposes we print by console when we start loading the scenario.
+    cout << "LOADING SCENARIO" << endl;
 
-        cout &lt;&lt; &quot;SCENARIO: LOADING TILES IMAGES&quot; &lt;loadImage("track/grass.jpg");
-        (*(texture_array_+1)) = new ofImage();
-        (*(texture_array_+1))-&gt;loadImage("track/racing_curve_1.jpg");
-        (*(texture_array_+2)) = new ofImage();
-        (*(texture_array_+2))-&gt;loadImage("track/racing_curve_2.jpg");
-        (*(texture_array_+3)) = new ofImage();
-        (*(texture_array_+3))-&gt;loadImage("track/racing_curve_3.jpg");
-        (*(texture_array_+4)) = new ofImage();
-        (*(texture_array_+4))-&gt;loadImage("track/racing_curve_4.jpg");
-        (*(texture_array_+5)) = new ofImage();
-        (*(texture_array_+5))-&gt;loadImage("track/racing_road_vert.jpg");
-        (*(texture_array_+6)) = new ofImage();
-        (*(texture_array_+6))-&gt;loadImage("track/racing_road_hor.jpg");
-        (*(texture_array_+7)) = new ofImage();
-        (*(texture_array_+7))-&gt;loadImage("track/Tree.png");
+    cout << "SCENARIO: LOADING TILES IMAGES" << endl;
+    (*(texture_array_+0)) = new ofImage();
+    (*(texture_array_+0))->loadImage("track/grass.jpg");
+    (*(texture_array_+1)) = new ofImage();
+    (*(texture_array_+1))->loadImage("track/racing_curve_1.jpg");
+    (*(texture_array_+2)) = new ofImage();
+    (*(texture_array_+2))->loadImage("track/racing_curve_2.jpg");
+    (*(texture_array_+3)) = new ofImage();
+    (*(texture_array_+3))->loadImage("track/racing_curve_3.jpg");
+    (*(texture_array_+4)) = new ofImage();
+    (*(texture_array_+4))->loadImage("track/racing_curve_4.jpg");
+    (*(texture_array_+5)) = new ofImage();
+    (*(texture_array_+5))->loadImage("track/racing_road_vert.jpg");
+    (*(texture_array_+6)) = new ofImage();
+    (*(texture_array_+6))->loadImage("track/racing_road_hor.jpg");
+    (*(texture_array_+7)) = new ofImage();
+    (*(texture_array_+7))->loadImage("track/Tree.png");
 
-        trees_vector_.push_back(ofPoint(187, 441));
-        trees_vector_.push_back(ofPoint(221, 307));
-        trees_vector_.push_back(ofPoint(563, 226));
-        trees_vector_.push_back(ofPoint(509, 595));
-        trees_vector_.push_back(ofPoint(903, 229));
-        trees_vector_.push_back(ofPoint(755, 364));
+    trees_vector_.push_back(ofPoint(187, 441));
+    trees_vector_.push_back(ofPoint(221, 307));
+    trees_vector_.push_back(ofPoint(563, 226));
+    trees_vector_.push_back(ofPoint(509, 595));
+    trees_vector_.push_back(ofPoint(903, 229));
+    trees_vector_.push_back(ofPoint(755, 364));
 
-        int temp[] =       {3, 6, 6, 6, 6, 6, 6, 4,
-        5, 0, 0, 0, 0, 0, 3, 1,
-        5, 0, 0, 3, 4, 0, 5, 0,
-        5, 0, 3, 1, 5, 0, 2, 4,
-        5, 0, 5, 0, 5, 0, 0, 5,
-        2, 6, 1, 0, 2, 6, 6, 1};
-        memcpy(scenario_array_,temp,sizeof(temp));
-    }
+    int temp[] =       {3, 6, 6, 6, 6, 6, 6, 4,
+    5, 0, 0, 0, 0, 0, 3, 1,
+    5, 0, 0, 3, 4, 0, 5, 0,
+    5, 0, 3, 1, 5, 0, 2, 4,
+    5, 0, 5, 0, 5, 0, 0, 5,
+    2, 6, 1, 0, 2, 6, 6, 1};
+    memcpy(scenario_array_,temp,sizeof(temp));
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -270,7 +279,8 @@ class Scenario{
     </p>
 
     <p style="text-align:justify;">
-    	<a href="http://www.madowen.es/wp-content/uploads/2013/04/SRC-Tiles.jpg"><!--<img alt="SRC - Tiles" class="aligncenter size-full wp-image-134" height="120" src="http://www.madowen.es/wp-content/uploads/2013/04/SRC-Tiles.jpg" width="959" />--></a>
+        {% img  /assets/2013-07-21-Simple-Race-Game/SRC-Tiles.jpg %}
+    	<!--<a href="http://www.madowen.es/wp-content/uploads/2013/04/SRC-Tiles.jpg"><img alt="SRC - Tiles" class="aligncenter size-full wp-image-134" height="120" src="http://www.madowen.es/wp-content/uploads/2013/04/SRC-Tiles.jpg" width="959" /></a>-->
     </p>
 
     <p style="text-align:justify;">
@@ -278,24 +288,24 @@ class Scenario{
     </p>
 
 {% highlight c++ linenos %}
-    void Scenario::draw(){
-        // We set the color to draw at pure white.
-        ofSetColor(255, 255, 255);
+void Scenario::draw(){
+    // We set the color to draw at pure white.
+    ofSetColor(255, 255, 255);
 
-        for(int j = 0; j &lt; scenario_height_; j++){
-            for(int i = 0; i &lt; scenario_width_; i++){
-                int tile_type = *(scenario_array_+j*scenario_width_+i);
-                (*(texture_array_+tile_type))->draw(i*tile_width_, j*tile_height_, tile_width_, tile_height_);
-            }
-        }
-
-        for (std::vector::iterator it = trees_vector_.begin() ; it != trees_vector_.endhighlight(); ++it){
-            ofPushMatrix();
-            ofTranslate((*it).x, (*it).y);
-            (*(texture_array_+7))-&gt;draw(0, 0, tile_width_/3, tile_height_/3);
-            ofPopMatrix();
+    for(int j = 0; j < scenario_height_; j++){
+        for(int i = 0; i < scenario_width_; i++){
+            int tile_type = *(scenario_array_+j*scenario_width_+i);
+            (*(texture_array_+tile_type))->draw(i*tile_width_, j*tile_height_, tile_width_, tile_height_);
         }
     }
+
+    for (std::vector::iterator it = trees_vector_.begin() ; it != trees_vector_.endhighlight(); ++it){
+        ofPushMatrix();
+        ofTranslate((*it).x, (*it).y);
+        (*(texture_array_+7))->draw(0, 0, tile_width_/3, tile_height_/3);
+        ofPopMatrix();
+    }
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -314,23 +324,24 @@ class Scenario{
    </p>
 
 {% highlight c++ linenos %}
-    scenario_.setup();
-    cars_[0].setup(120,37.5,35,20);
-    cars_[0].set_texture("cars/Red.png");
+scenario_.setup();
+cars_[0].setup(120,37.5,35,20);
+cars_[0].set_texture("cars/Red.png");
 {% endhighlight %}
 
     <p style="text-align:justify;">
-    	<a href="http://www.madowen.es/wp-content/uploads/2013/04/Red.png"><!--<img alt="Red" class="alignright size-full wp-image-136" height="98" src="http://www.madowen.es/wp-content/uploads/2013/04/Red.png" title="Red" width="127" />--></a>Right now, if we draw the scenario and cars in the method draw () and run the project, we have running our game, but we can not move the car. In order for the car move using the keyboard, we need to capture the event that happens when any key is pressed and when is released. The framework has already implemented these methods, but we have to tell them what to do when a button is pushed and released.
+        {% img alignright /assets/2013-07-21-Simple-Race-Game/Red.png %}
+    	<!--<a href="http://www.madowen.es/wp-content/uploads/2013/04/Red.png"><img alt="Red" class="alignright size-full wp-image-136" height="98" src="http://www.madowen.es/wp-content/uploads/2013/04/Red.png" title="Red" width="127" /></a>-->Right now, if we draw the scenario and cars in the method draw () and run the project, we have running our game, but we can not move the car. In order for the car move using the keyboard, we need to capture the event that happens when any key is pressed and when is released. The framework has already implemented these methods, but we have to tell them what to do when a button is pushed and released.
     </p>
 
 {% highlight c++ linenos %}
-    void testApp::keyPressed(int key){
-        key_Pressed[key] = true;
-    }
+void testApp::keyPressed(int key){
+    key_Pressed[key] = true;
+}
 
-    void testApp::keyReleased(int key){
-        key_Pressed[key] = false;
-    }
+void testApp::keyReleased(int key){
+    key_Pressed[key] = false;
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
@@ -339,20 +350,20 @@ class Scenario{
     </p>
 
 {% highlight c++ linenos %}
-        void testApp::update(){
-            if (key_Pressed['w']) //Up
-                cars_[0].car_accelerate();
-            if (key_Pressed['a']) //Left
-                cars_[0].car_turn_left();
-            if (key_Pressed['d']) //Right
-                cars_[0].car_turn_right();
-            if (key_Pressed['s']) //Down
-                cars_[0].car_reverse();
-            if (!key_Pressed['w'] &amp;&amp; !key_Pressed['s']) //If the accelerating and reverse button are not pressed, the car breaks
-                cars_[0].car_break();
+void testApp::update(){
+    if (key_Pressed['w']) //Up
+        cars_[0].car_accelerate();
+    if (key_Pressed['a']) //Left
+        cars_[0].car_turn_left();
+    if (key_Pressed['d']) //Right
+        cars_[0].car_turn_right();
+    if (key_Pressed['s']) //Down
+        cars_[0].car_reverse();
+    if (!key_Pressed['w'] && !key_Pressed['s']) //If the accelerating and reverse button are not pressed, the car breaks
+        cars_[0].car_break();
 
-            cars_[0].update(dt);
-        }
+    cars_[0].update(dt);
+}
 {% endhighlight %}
     <p style="text-align:justify;">
     	Since for each frame we want the car to move, we will check in the update() if keys are pressed to move the car. Also if we want that when we do not press any key the car breaks, we have to check that the keys to accelerate and reverse are not pressed. The methods we use are pretty obviuos, accelerate, break and reverse increments or decrements the car speed atribute, and turn_right and turn_left increments or decrements the car rotation atribute. 
@@ -363,27 +374,27 @@ class Scenario{
     </p>
 
 {% highlight c++ linenos %}
-    void Car::update(float dt){
+void Car::update(float dt){
+    ofVec2f turn(cos(car_rotation_*PI/180),sin(car_rotation_*PI/180)); //cos() and sin() works in radians
+    ofPoint new_point = car_position_+turn*car_speed_*dt;
 
-        ofVec2f turn(cos(car_rotation_*PI/180),sin(car_rotation_*PI/180)); //cos() and sin() works in radians
-        ofPoint new_point = car_position_+turn*car_speed_*dt;
-
-        //The position is only setted if we are on the limits of the scenario
-        if (ofInRange(new_point.x,0, ofGetWidth()-car_width_) &amp;&amp; ofInRange(new_point.y,0,ofGetHeight()-car_height_))
-            car_position_.set(new_point);
-    }
+    //The position is only setted if we are on the limits of the scenario
+    if (ofInRange(new_point.x,0, ofGetWidth()-car_width_) && ofInRange(new_point.y,0,ofGetHeight()-car_height_))
+        car_position_.set(new_point);
+}
 {% endhighlight %}
 
     <p style="text-align:justify;">
     	From this point that we already have implemented the basic elements of game, simply must be added features like controlling the car goes through all the tiles forming the track, or when the car moves by the grass tiles, the speed is reduced, and even control the collisions between cars and trees.
     </p>
 
-    <p>
-    	<a href="http://www.madowen.es/wp-content/uploads/2013/04/SRG-Track.jpg" rel="" target="" title=""><!--<img alt="SRG - Track" class="aligncenter size-full wp-image-138" height="722" src="http://www.madowen.es/wp-content/uploads/2013/04/SRG-Track.jpg" title="SRG - Track" width="963" />--></a>
+    <p style="text-align:justify;">
+        {% img  /assets/2013-07-21-Simple-Race-Game/SRC-Track.jpg %}
+    	<!--<a href="http://www.madowen.es/wp-content/uploads/2013/04/SRG-Track.jpg" rel="" target="" title=""><img alt="SRG - Track" class="aligncenter size-full wp-image-138" height="722" src="http://www.madowen.es/wp-content/uploads/2013/04/SRG-Track.jpg" title="SRG - Track" width="963" /></a>-->
     </p>
 
     <p style="text-align:justify;">
-        Here you have the source code. <a href="http://www.madowen.es/wp-content/uploads/2013/04/Simple-Race-Game-src.zip">SRG - src</a><br />
-        Here you have the textures used and some extras. <a href="http://www.madowen.es/wp-content/uploads/2013/04/data.rar">SRG - Tiles</a>
+        Here you have the source code. <a href="/assets/2013-07-21-Simple-Race-Game/Simple-Race-Game-src.zip"><i class="icon-download"></i>SRG - src</a><br />
+        Here you have the textures used and some extras. <a href="/assets/2013-07-21-Simple-Race-Game/data.zip"><i class="icon-download"></i>SRG - Tiles</a>
     </p>
 </div>

@@ -1,0 +1,191 @@
+---
+layout: post
+permalink: '/:title'
+title: Ray Tracing
+category: Graphics
+tags:
+- 3D
+- Computer Graphics
+- Ray Tracing
+- Sphere
+- Texturing
+author: Alex Catalán
+---
+
+<p style="text-align: justify;">
+	In computer graphics, Ray Tracing is an algorithm for generating 3D images by tracing the path of light through pixels in an image plane and simulating the effects of its encounters with virtual objects, like reflections, refractions, shadows. The algorithm produce a very high degree of visual realism.
+</p>
+<p id="more">
+	<!--more-->
+</p>
+<div>
+	<h2>The algorithm</h2>
+	<blockquote>
+		<p style="text-align:justify;">
+			<span style="font-family: georgia, serif; font-style: italic;">for each pixel from image</span>
+		</p>
+		<p style="margin-left: 40px;">
+			<span style="font-family: georgia, serif; font-style: italic;">create an infinte ray with the camera position and this pixel</span>
+		</p>
+		<p style="margin-left: 40px;">
+			<span style="font-family: georgia, serif; font-style: italic;">for each object in the scene</span>
+		</p>
+		<p style="margin-left: 80px;">
+			<span style="font-family: georgia, serif; font-style: italic;">if the ray intersects with the object</span>
+		</p>
+		<p style="margin-left: 120px;">
+			<span style="font-family: georgia, serif; font-style: italic;">if the intersection is infront and the nearest to the camera</span>
+		</p>
+		<p style="margin-left: 160px;">
+			<span style="font-family: georgia, serif; font-style: italic;">paint the pixel with the color at the intersection point</span>
+		</p>
+		<p style="margin-left: 80px;">
+			<span style="font-family: georgia, serif; font-style: italic;">else</span>
+		</p>
+		<p style="margin-left: 120px;">
+			<span style="font-family: georgia, serif; font-style: italic;">paint the pixel with the background color</span>
+		</p>
+	</blockquote>
+	<p style="text-align: justify;">Obviously this is a very simplified version of the algorithm, but already helps us to understand how it works.</p>
+	<p style="text-align: justify;">
+		{% img alignright /assets/2013-08-08-Ray-Tracing/800px-Ray_trace_diagram.svg_.png 300 %}
+		<!--<a href="http://www.madowen.es/wp-content/uploads/2013/05/800px-Ray_trace_diagram.svg_.png"><img class="alignright size-medium wp-image-151" src="http://www.madowen.es/wp-content/uploads/2013/05/800px-Ray_trace_diagram.svg_-300x199.png" alt="Ray Tracing" width="300" height="199" /></a>-->As we want to create an image from scratch, we have to loop through each pixel of the image and calculate the color with which will have to paint. To calculate the color for each pixel, we create an infinite ray from the camera position to the pixel, wich will cross the scene intersecting with the elements of the scene, after obtaining all intersections of the ray with the elements of the scene, will save the nearest intersection and is in front the camera (the calculations can give intersections that are behind the camera, if there are elements behind it).
+	</p>
+	<p style="text-align: justify;">
+		Once we have the intersection point, we should paint the pixel with the information about the color that we can obtain from the element surface, else if the ray does not intersect with any element then the pixel will be paint with the background color. At this moment we have two problems, find if the ray intersects with the element of the scene, and what color is the element surface. For now let's assume that the element surface is red, and see how calculate if a ray intersects some primitive elements.
+	</p>
+</div>
+<div>
+	<h2 style="text-align: justify;">Ray</h2>
+	<p style="text-align: justify;">
+	Knowing the line equation:<br>
+		<span style="margin-left: 10px">\( \vec{r}(t)=p_0 + t \cdot \hat{v} \)</span><br>
+		Where:<br>
+		<span style="margin-left: 10px">\( t \) is the distance from \( p_0 \)</span><br>
+		<span style="margin-left: 10px">\( p_0 \) is a point of the line</span><br>
+		<span style="margin-left: 10px">\( \hat{v} \) is the direction of the line</span><br>
+		Since \(\vec{r} \) is a vector, we can decompose like:<br>
+		<span style="margin-left: 10px">\( r_x(t)= (p_0)_{x} + t \cdot v_{x} \)</span><br>
+		<span style="margin-left: 10px">\(r_y(t)= (p_0)_{y} + t \cdot v_{y} \)</span><br>
+		<span style="margin-left: 10px">\( r_z(t)= (p_0)_{z} + t \cdot v_{z} \)</span><br>
+	</p>
+	<p style="text-align: justify;">
+		Now that we know this, we can check if our ray intersects some element of our scene. Also, if we want to calculate some features like reflections, refractions and shadows we will need to know the normal of the intersected element.
+	</p>
+</div>
+<div>
+	<h2 style="text-align: justify;">Ray vs Plane</h2>
+	<p style="text-align: justify;">
+		An infinite plane is for sure the most simple element that we can intersect with a ray. The plane will give a sense of depth to our image creating the horizon.
+	</p>
+	<p style="text-align: justify;">
+		{% img /assets/2013-08-08-Ray-Tracing/RT_suelo.jpg %}
+		<!--<a href="http://www.madowen.es/wp-content/uploads/2013/08/RT_suelo.jpg"><img class="aligncenter size-full wp-image-226" src="http://www.madowen.es/wp-content/uploads/2013/08/RT_suelo.jpg" alt="RT_suelo" width="640" height="480" /></a>-->
+		
+	</p>
+	<p style="text-align: justify;">
+		The equation from a plane is given by a point \( p \) and 2 vectors \( \vec{u} \) and \( \vec{v} \) But in our case we don't know any point of our infinite plane, but we define it with its <b>normal</b> \( \hat{N} \) and the distance \( d \) from the camera, so we will use:<br>
+		<span style="margin-left: 10px">\( \vec{p} \cdot \hat{N} = d \)</span><br>
+		Where \( \vec{p} \) is the ray. Using the line equation we can say that:<br>
+		<span style="margin-left: 10px">\( (p_0 + t \cdot \hat{v}) \cdot \hat{N} = d \)</span><br>
+		<span style="margin-left: 10px">\( p_0 \cdot \hat{N} + t \cdot \hat{v} \cdot \hat{N} = d \)</span>
+		With every element from the scene we want to isolate the \( t \) variable because is the distance from the origin of the ray to the element if it intersects.<br>
+		<span style="margin-left: 10px">\( t = \dfrac {d - p_0 \cdot \hat{N}}{\hat{v} \cdot \hat{N}} \)</span><br>
+		This \( t \) for every element that we calculate can be:
+	</p>
+
+	<ul>
+		<li>Negative: it means that the ray intersects from behind the origin of the element, so it will return a false value and has to be ignored.</li>
+		<li>Positive: it means that the ray intersects with the element, so it will return a valid value.</li>
+		<li>Zero: this means that the ray is tangent to the element, so it means that the ray only intersects at one point with the element. This is a valid value except for the plane, which will have infinite points, so it will be ignored.</li>
+	</ul>
+	<p style="text-align: justify;">
+		We only need the smaller positive value, so from every \( t \) valid value that we get, we only save the smaller one.
+	</p>
+</div>
+<div>
+	<h2 style="text-align: justify;">Ray vs Sphere</h2>
+	<p style="text-align: justify;">
+		Now we have a reference to put the elements. We start with the sphere, which is the simplest of geometric figures.
+	</p>
+	<p style="text-align: justify;">
+		{% img /assets/2013-08-08-Ray-Tracing/RT_suelo_esfera.jpg %}
+		<!--<a href="http://www.madowen.es/wp-content/uploads/2013/08/RT_suelo_esfera.jpg"><img class="aligncenter size-full wp-image-227" src="http://www.madowen.es/wp-content/uploads/2013/08/RT_suelo_esfera.jpg" alt="RT_suelo_esfera" width="640" height="480" /></a>-->
+	</p>
+	<p style="text-align: justify;">
+		The equation of the sphere centered at the origin of radius R:<br>
+		<span style="margin-left: 10px">\( x^2 + y^2 + z^2 = R^2 \)</span><br>
+		Using the line equation we can say that:<br>
+		<span style="margin-left: 10px">\( ((p_0)_{x} + t \cdot v_{x})^2 + ((p_0)_{y} + t \cdot v_{y})^2 + ((p_0)_{z} + t \cdot v_{z})^2=R^2 \)</span><br>
+		<span style="margin-left: 10px">\( ((p_0)_{x}^2 + t^2v_{x}^2 + 2t(p_0)_{x}v_{x}) + ((p_0)_{y}^2 + t^2v_{y}^2 + 2t(p_0)_{y}v_{y}) + ((p_0)_{z}^2 + t^2v_{z}^2 + 2t(p_0)_{z}v_{z}) = R^2 \)</span><br>
+		<span style="margin-left: 10px">\( t^2(v_{x}^2+v_{y}^2+v_{z}^2) + t(2(p_0)_{x}v_{x} + 2(p_0)_{y}v_{y} + 2(p_0)_{z}v_{z}) + ((p_0)_{x}^2 + (p_0)_{y}^2 + (p_0)_{z}^2 - R^2) = 0 \)</span><br>
+		This can be a little confusing, but we can simplify to a known formula that we can solve:
+		<span style="margin-left: 10px">\( at^2 + bt + c = 0 \)</span><br>
+		Now we have to solve what we have simplified:<br>
+		<span style="margin-left: 10px">\( a = v_{x}^2+v_{y}^2+v_{z}^2 = 1 \) if \( v \) is normalized.</span><br>
+		<span style="margin-left: 10px">\( b = 2(2(p_0)_{x}v_{x} + 2(p_0)_{y}v_{y} + 2(p_0)_{z}v_{z}) = 2p_0 \cdot \hat{v} \)</span><br>
+		<span style="margin-left: 10px">\( c = (p_0)_{x}^2 + (p_0)_{y}^2 + (p_0)_{z}^2 - R^2 = p_0 \cdot p_0 - R^2 \)</span><br>
+		Once we have this solved, we can solve the quadratic equation:<br>
+		<span style="margin-left: 10px">\( t = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a} \)</span><br>
+		If first we try to solve the root, we can see 3 cases, where \( D = b^2 - 4ac \):
+	</p>
+
+	<ul>
+		<li>\( D &lt; 0 \Rightarrow  \) It doesn't have intersection</li>
+		<li>\( D = 0 \Rightarrow t = \dfrac{-b}{2a} \)</li>
+		<li>\( D &gt; 0 \Rightarrow  \) We pick the smaller positive from:
+			<ul>
+				<li>\( t_0 = \dfrac {-b + D}{2a}  \)</li>
+				<li>\( t_0 = \dfrac {-b - D}{2a}  \)</li>
+			</ul>
+		</li>
+	</ul>
+	<p style="text-align: justify;">
+		The sphere <b>normal</b> at the point of intersection is the normalized vector between the point and the center of the sphere.
+	</p>
+</div>
+<div>
+	<h2 style="text-align: justify;">Illumination</h2>
+	<p style="text-align: justify;">
+		Now that we know how to calculate if our ray intersects with any element of the scene, and get the point from the element where intersects and its normal at this point if it's true, we should paint the pixel with the element material color. But like in real life, if something it's not illuminated by a point of light this won't be visible, whatever the color of its surface.
+	</p>
+	<p style="text-align: justify;">
+		<!--<a title="" href="http://www.madowen.es/wp-content/uploads/2013/08/Ray-Tracing-1.jpg" target="" rel=""><img class="size-full wp-image-205 alignleft" title="" src="http://www.madowen.es/wp-content/uploads/2013/08/Ray-Tracing-1.jpg" alt="Ray Tracing 1" width="371" height="163" /></a>-->
+	</p>
+	<p style="text-align: justify;">
+		{% img alignleft /assets/2013-08-08-Ray-Tracing/Ray-Tracing-1.jpg 371 %}
+		As we see in the image, the vector \( \vec{E_1} \) comes from the camera and intersects with the red ball at the point \( P_1 \), this point defines a new vector \( \vec{L_1} \) with the light in the scene, the same happens with the vector \( \vec{E_2} \) but in this case \( \vec{L_2} \) intersects with the sphere so this pixel has to be painted as a shadow and not like the first one as the element material color.
+	</p>
+	<p style="text-align: justify;">
+		
+		Indeed to know exactly how to paint the element surface we have to take in count some parameters. First a material color is defined by 3 coefficients (Ambient, Diffuse and Specular), also has a level of reflectance, refractance and glossines (the way it shines with a direct light source). The light source also has a color and potential properties.
+	</p>
+	<p style="text-align: justify;">
+		<!--<a title="" href="http://www.madowen.es/wp-content/uploads/2013/08/Ray-Tracing-2-reflection.jpg" target="" rel=""><img class="size-full wp-image-205 alignleft" title="" src="http://www.madowen.es/wp-content/uploads/2013/08/Ray-Tracing-2-reflection.jpg" alt="Ray Tracing 2 reflection" width="371" height="163" /></a>-->
+	</p>
+	<p style="text-align: justify;">
+		{% img alignleft /assets/2013-08-08-Ray-Tracing/Ray-Tracing-2-reflection.jpg 371 %}
+		In this image we see how the reflectance is calculated and how the light is reflected on a surface, knowing that \( ray \) is the ray from the camera to the scene, and \( light \) is the data from a light source in the scene:
+	</p>
+	<p style="text-align: justify;">
+		<span style="margin-left: 10px">\( \hat{E} = -ray.dir \)</span><br>
+		<span style="margin-left: 10px">\( \hat{L} = P - light.loc \)</span><br>
+		<span style="margin-left: 10px">\( \hat{E_r} = -\hat{E} + 2*\hat{N} \cdot \hat{E} * \hat{N} \)</span><br>
+		<span style="margin-left: 10px">\( \hat{L_r} = -\hat{L} + 2*\hat{N} \cdot \hat{L} * \hat{N} \)</span><br>
+		With this calculations done, we can solve the equation that we will use for the final color of the pixel.  \( C_r = getColor(\hat{E_r}) \) where \( C_r \) is the color of the reflection on the surface.<br>
+		\( C_l = \displaystyle\sum_{i=0}^n (\hat{N} \cdot \hat{L_i} \cdot K_d + (\hat{L} \cdot \hat{E_r})^g \cdot K_s)*C_i  \) where \( C_l \) is the color based on all lights from the scene.<br>
+		As we said before if \( L_i \) intersects with an element in the scene we only add to \( C_l \) the ambient coefficient \( K_a \). And at the end:  \( C_f = C_r + C_l \) where \( C_f \) is the final color on the pixel.
+	</p>
+	<p style="text-align: justify;">
+		{% img /assets/2013-08-08-Ray-Tracing/RT_billar.jpg %}
+		<!--<a href="http://www.madowen.es/wp-content/uploads/2013/08/RT_billar.jpg"><img class="aligncenter size-full wp-image-228" src="http://www.madowen.es/wp-content/uploads/2013/08/RT_billar.jpg" alt="RT_billar" width="640" height="480" /></a>-->
+	</p>
+	<p style="text-align: justify;">
+		This is how the Ray Tracing should look with some reflections, shadows and different materials. The next image is a level 4 fractal that represents a snowflake made of spheres as the featured image of this post that is a level 2 fractal snowflake.
+	</p>
+	<p style="text-align: justify;">
+		{% img /assets/2013-08-08-Ray-Tracing/RT_snowball_4.jpg %}
+		<!--<a href="http://www.madowen.es/wp-content/uploads/2013/08/RT_snowball_4.jpg"><img class="aligncenter size-full wp-image-232" src="http://www.madowen.es/wp-content/uploads/2013/08/RT_snowball_4.jpg" alt="RT_snowball_4" width="1024" height="1024" /></a>-->
+	</p>
+	Here is the source code: <a href="/assets/2013-08-08-Ray-Tracing/RT_-src.zip"><i class="icon-download"></i>SRC</a>
+</div>
