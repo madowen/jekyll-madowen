@@ -23,7 +23,7 @@ author: Alex Catalán
        First we have to download from <a href="http://www.openframeworks.cc/download/">OpenFrameworks</a> website the latest release for the IDE we use, in this case we use Code Blocks. Once downloaded and unzipped wherever you want, go to the folder /apps/myApps/emptyExample, there you will find what you need to start immediately. If we open the file emptyExample.workspace with Code Blocks, we can see 3 files created in the folder /src.
    </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     #include "testApp.h"
     #include "ofAppGlutWindow.h"
 
@@ -40,7 +40,7 @@ author: Alex Catalán
     	In the main.cpp file, basically is created a window with the dimensions in which the game will run. Once created the application runs.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     #pragma once
     #include "ofMain.h"
 
@@ -69,7 +69,7 @@ author: Alex Catalán
     	The draw() method, draw all the elements of the application for the next frame that is going to show at screen, this method will be called after every update().
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void testApp::setup(){
         ofEnableAlphaBlendhighlighting();
         // We set the application to run at 60 FPS.
@@ -91,7 +91,7 @@ author: Alex Catalán
     	Once we have an area to play, we need a toy. As we saw at class testApp, we create a new class with the 3 basic methods, setup(), update() and draw(), and some necessary attributes.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     class Car{
         public:
         // We declare the basic methods for the class.
@@ -122,7 +122,7 @@ author: Alex Catalán
     	To modify all attributes also implement their getters and setters. With the only difference set_texture(), which will load the texture in memory.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void Car::set_texture(string path){
         texture_ = new ofImage();
         texture_-&gt;loadImage(path);
@@ -134,7 +134,7 @@ author: Alex Catalán
     	First we calculate the direction in which we should move, using the cosine and sine of the car&#039;s rotation, it will provide us a unit vector (length = 1) which will be multiplied by the car&#039;s speed to get the distance advanced in the cycle. And we will add to the current position.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void Car::update(float dt){
         //cos() and sin() works in radians, so we have to transform degree-&gt;radian
         ofVec2f turn(cos(car_rotation_*PI/180),sin(car_rotation_*PI/180));
@@ -152,7 +152,7 @@ author: Alex Catalán
     	Once we know what position should be the car when moving, we have to draw it on the screen. To do this, we will move the object in the 2D world, translating to the position that we calculated before, and also rotating to aim according to need.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void Car::draw(){
         ofPushMatrix();
         ofTranslate(car_position_.x,car_position_.y);   //translate to correct position
@@ -175,7 +175,7 @@ author: Alex Catalán
        What would be a racing game without a track where to compete? As each class in the class Scenario, we define the 3 basic methods, in addition to its attributes and functions needed for the class.
    </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
 class Scenario{
     public:
     // Declaration of the basic methods for the scenario class.
@@ -207,7 +207,7 @@ class Scenario{
     	At the constructor, we reserve the space in memory for the instantiation of the class.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     Scenario::Scenario(){
         texture_array_ = (ofImage**)malloc(7*sizeof(ofImage*));
 
@@ -226,7 +226,7 @@ class Scenario{
     	With the allocated memory, we load the textures and set the scenario in the setup() method.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void Scenario::setup(){
 
         // Just for loading purposes we print by console when we start loading the scenario.
@@ -277,14 +277,15 @@ class Scenario{
     	As the scenario represents the track where cars run, and it is an inanimate object, that will not change over time, the update() method will be empty.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void Scenario::draw(){
         // We set the color to draw at pure white.
         ofSetColor(255, 255, 255);
 
         for(int j = 0; j &lt; scenario_height_; j++){
             for(int i = 0; i &lt; scenario_width_; i++){
-                draw(i*tile_width_, j*tile_height_, tile_width_, tile_height_);
+                int tile_type = *(scenario_array_+j*scenario_width_+i);
+                (*(texture_array_+tile_type))->draw(i*tile_width_, j*tile_height_, tile_width_, tile_height_);
             }
         }
 
@@ -312,7 +313,7 @@ class Scenario{
        The initialization is quite simple, just call the setup() method of the scenario and the cars, passing to each car its initial position and size of the texture.
    </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     scenario_.setup();
     cars_[0].setup(120,37.5,35,20);
     cars_[0].set_texture("cars/Red.png");
@@ -322,7 +323,7 @@ class Scenario{
     	<a href="http://www.madowen.es/wp-content/uploads/2013/04/Red.png"><!--<img alt="Red" class="alignright size-full wp-image-136" height="98" src="http://www.madowen.es/wp-content/uploads/2013/04/Red.png" title="Red" width="127" />--></a>Right now, if we draw the scenario and cars in the method draw () and run the project, we have running our game, but we can not move the car. In order for the car move using the keyboard, we need to capture the event that happens when any key is pressed and when is released. The framework has already implemented these methods, but we have to tell them what to do when a button is pushed and released.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void testApp::keyPressed(int key){
         key_Pressed[key] = true;
     }
@@ -337,7 +338,7 @@ class Scenario{
     	Now that we have the keys pressed or not, the game has to tell the car what to do on every frame for each key pressed.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
         void testApp::update(){
             if (key_Pressed['w']) //Up
                 cars_[0].car_accelerate();
@@ -361,7 +362,7 @@ class Scenario{
     	Now that we can move our car across the scenario, problems arise. The most important thing to fix is the fact that we can get out of the screen. To fix that exists an OpenFramework method that returns true if a value is between a range, we use this method to check if our car will be outside the screen when we update its position, if it is true it won't move to the new position. This check has to be done every time that we want to move our car, so we add it at car's update() method.
     </p>
 
-{% highlight c++ lineos %}
+{% highlight c++ linenos %}
     void Car::update(float dt){
 
         ofVec2f turn(cos(car_rotation_*PI/180),sin(car_rotation_*PI/180)); //cos() and sin() works in radians
@@ -380,7 +381,7 @@ class Scenario{
     <p>
     	<a href="http://www.madowen.es/wp-content/uploads/2013/04/SRG-Track.jpg" rel="" target="" title=""><!--<img alt="SRG - Track" class="aligncenter size-full wp-image-138" height="722" src="http://www.madowen.es/wp-content/uploads/2013/04/SRG-Track.jpg" title="SRG - Track" width="963" />--></a>
     </p>
-    
+
     <p style="text-align:justify;">
         Here you have the source code. <a href="http://www.madowen.es/wp-content/uploads/2013/04/Simple-Race-Game-src.zip">SRG - src</a><br />
         Here you have the textures used and some extras. <a href="http://www.madowen.es/wp-content/uploads/2013/04/data.rar">SRG - Tiles</a>
